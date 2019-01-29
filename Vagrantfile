@@ -21,13 +21,13 @@ default_webserver = "nginx"
 
 if settings.has_key?("ubuntu")
     unless supported_ubuntu.include?(settings["ubuntu"])
-        abort("Web server #{settings["webserver"]} not recognised. Only #{supported_webservers} are currenly supported with DevBox.")
+        abort("Web server #{settings["webserver"]} not recognised. Only #{supported_webservers} are currently supported with DevBox.")
     end
 end
 
 if settings.has_key?("webserver")
     unless supported_webservers.include?(settings["webserver"])
-        abort("Web server #{settings["webserver"]} not recognised. Only #{supported_webservers} are currenly supported with DevBox.")
+        abort("Web server #{settings["webserver"]} not recognised. Only #{supported_webservers} are currently supported with DevBox.")
     end
 
     webserver = settings["webserver"]
@@ -216,7 +216,7 @@ Vagrant.configure("2") do |config|
 
             if site.has_key?("php")
                 unless supported_php.include?(site["php"])
-                    abort("PHP version #{site["php"]} not recognised. Only versions #{supported_php} are currenly supported with DevBox.")
+                    abort("PHP version #{site["php"]} not recognised. Only versions #{supported_php} are currently supported with DevBox.")
                 end
             end
 
@@ -237,7 +237,7 @@ Vagrant.configure("2") do |config|
     # Install alternatative version of MySQL
     if settings.has_key?("mysql")
         unless supported_mysql.include?(settings["mysql"])
-            abort("MySQL version #{settings["mysql"]} not recognised. Only versions #{supported_mysql} are currenly supported with DevBox.")
+            abort("MySQL version #{settings["mysql"]} not recognised. Only versions #{supported_mysql} are currently supported with DevBox.")
         end
 
         config.vm.provision "shell" do |s|
@@ -266,7 +266,7 @@ Vagrant.configure("2") do |config|
     # Set alternative PHP version for CLI
     if settings.has_key?("php-cli")
         unless supported_php.include?(settings["php-cli"])
-            abort("PHP version #{settings["php-cli"]} not recognised. Only versions #{supported_php} are currenly supported with DevBox.")
+            abort("PHP version #{settings["php-cli"]} not recognised. Only versions #{supported_php} are currently supported with DevBox.")
         end
 
         config.vm.provision "shell" do |s|
