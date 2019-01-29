@@ -1,11 +1,17 @@
 ---
-# VM configurations
-#ubuntu: "14.04"
+# Name of VM (VirtualBox label)
+name: vmname
+
+# Hostname of the machine
+hostname: vmhostname
+
+# Version of ubuntu to use
+ubuntu: "14.04"
 
 # Networks to configure
-#networks:
-#    - type: bridged
-#      ip: "192.168.178.40"
+networks:
+    - type: bridged
+      ip: "192.168.178.40"
 
 # Additional ports to forward
 #ports:
@@ -13,18 +19,18 @@
 #      host: 44300
 
 # Shared folders to configure
-#folders:
-#    - map: ~/code
-#      to: /vagrant/code
+folders:
+    - map: ~/code
+      to: /vagrant/code
 
 # Web server to run
-#webserver: apache
+webserver: nginx
 
 # PHP version to use for CLI
-#php-cli: "5.6"
+php-cli: "7.2"
 
 # MySQL version to use
-#mysql: "5.5"
+mysql: "5.7"
 
 # Additional Ubuntu packages to install
 #apt-packages:
@@ -37,6 +43,7 @@
 sites:
     - url: site.test
       root: /vagrant
+      php: 7.2
 #    - url: site70.test
 #      root: /vagrant
 #      php: "7.0"
@@ -59,3 +66,7 @@ sites:
 # Global Composer packages to install
 #composer-packages:
 #    - laravel/envoy
+
+
+# Directory containing scripts of additional software
+scripts_dir: "scripts"

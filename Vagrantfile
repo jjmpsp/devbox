@@ -6,7 +6,7 @@ require 'yaml'
 settings = YAML::load(File.read("config.yaml"))
 post_script = "post"
 aliases = "aliases"
-script_dir = File.expand_path("scripts", File.dirname(__FILE__))
+scripts_dir = File.expand_path(settings["scripts_dir"] ||= "scripts", File.dirname(__FILE__))
 
 supported_php = ["5", "5.6", "7.0", "7.1", "7.2"]
 supported_ubuntu = ["14.04", "16.04"]
@@ -137,14 +137,14 @@ Vagrant.configure("2") do |config|
         settings["apt-packages"].each do |package|
             config.vm.provision "shell" do |s|
                 s.name = "Installing APT package [#{package}]"
-                s.path = "#{script_dir}/install-apt-package"
+                s.path = "#{scripts_dir}/install-apt-package"
                 s.args = package
             end
         end
 
         config.vm.provision "shell" do |s|
             s.name = "Restarting PHP-FPM"
-            s.path = "#{script_dir}/restart-php"
+            s.path = "#{scripts_dir}/restart-php"
             s.args = supported_php
         end
     end
@@ -154,7 +154,7 @@ Vagrant.configure("2") do |config|
         settings["composer-packages"].each do |package|
             config.vm.provision "shell" do |s|
                 s.name = "Installing Composer package [#{package}]"
-                s.path = "#{script_dir}/install-composer-package"
+                s.path = "#{scripts_dir}/install-composer-package"
                 s.args = package
                 s.privileged = false
             end
@@ -165,35 +165,35 @@ Vagrant.configure("2") do |config|
     if settings.has_key?("browser-testing") && settings["browser-testing"] == true
         config.vm.provision "shell" do |s|
             s.name = "Installing Java JRE"
-            s.path = "#{script_dir}/install-java"
+            s.path = "#{scripts_dir}/install-java"
             s.args = settings["java"] ||= nil
         end
 
         config.vm.provision "shell" do |s|
             s.name = "Installing Selenium Server"
-            s.path = "#{script_dir}/install-selenium"
+            s.path = "#{scripts_dir}/install-selenium"
             s.args = settings["selenium"] ||= nil
         end
 
         config.vm.provision "shell" do |s|
             s.name = "Installing Google Chrome"
-            s.path = "#{script_dir}/install-google-chrome"
+            s.path = "#{scripts_dir}/install-google-chrome"
         end
 
         config.vm.provision "shell" do |s|
             s.name = "Installing ChromeDriver"
-            s.path = "#{script_dir}/install-chromedriver"
+            s.path = "#{scripts_dir}/install-chromedriver"
             s.args = settings["chromedriver"] ||= nil
         end
 
         config.vm.provision "shell" do |s|
             s.name = "Installing Xvfb"
-            s.path = "#{script_dir}/install-xvfb"
+            s.path = "#{scripts_dir}/install-xvfb"
         end
 
         config.vm.provision "shell" do |s|
             s.name = "Adding Selenium Server bash commands"
-            s.path = "#{script_dir}/add-selenium-commands"
+            s.path = "#{scripts_dir}/add-selenium-commands"
         end
     end
 
@@ -210,7 +210,7 @@ Vagrant.configure("2") do |config|
         settings["sites"].each do |site|
             config.vm.provision "shell" do |s|
                 s.name = "Creating SSL certificate for [#{site["url"]}]"
-                s.path = "#{script_dir}/create-ssl-certificate"
+                s.path = "#{scripts_dir}/create-ssl-certificate"
                 s.args = [site["url"]]
             end
 
@@ -222,7 +222,7 @@ Vagrant.configure("2") do |config|
 
             config.vm.provision "shell" do |s|
                 s.name = "Creating site [#{site["url"]}] with PHP #{site["php"] ||= default_php}"
-                s.path = "#{script_dir}/serve-#{webserver}"
+                s.path = "#{scripts_dir}/serve-#{webserver}"
                 s.args = [site["url"], site["root"], site["php"] ||= default_php]
             end
         end
@@ -234,7 +234,7 @@ Vagrant.configure("2") do |config|
         end
     end
 
-    # Install alternatative version of MySQL
+    # Install alternative version of MySQL
     if settings.has_key?("mysql")
         unless supported_mysql.include?(settings["mysql"])
             abort("MySQL version #{settings["mysql"]} not recognised. Only versions #{supported_mysql} are currently supported with DevBox.")
@@ -242,7 +242,7 @@ Vagrant.configure("2") do |config|
 
         config.vm.provision "shell" do |s|
             s.name = "Installing MySQL #{settings["mysql"]}"
-            s.path = "#{script_dir}/install-mysql"
+            s.path = "#{scripts_dir}/install-mysql"
             s.args = settings["mysql"]
         end
     end
@@ -252,7 +252,7 @@ Vagrant.configure("2") do |config|
         settings["databases"].each do |db|
             config.vm.provision "shell" do |s|
                 s.name = "Creating MySQL database [#{db["name"]}]"
-                s.path = "#{script_dir}/create-mysql"
+                s.path = "#{scripts_dir}/create-mysql"
                 s.args = [db["name"], db["user"] ||= "joel", db["password"] ||= "secret"]
             end
         end
@@ -271,7 +271,7 @@ Vagrant.configure("2") do |config|
 
         config.vm.provision "shell" do |s|
             s.name = "Setting alternative PHP CLI to PHP #{settings["php-cli"]}"
-            s.path = "#{script_dir}/set-php-cli"
+            s.path = "#{scripts_dir}/set-php-cli"
             s.args = settings["php-cli"]
         end
     end
