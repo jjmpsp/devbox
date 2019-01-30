@@ -10,7 +10,7 @@ ubuntu: "14.04"
 
 # Networks to configure
 networks:
-    - type: bridged
+    - type: private
       ip: "192.168.178.40"
 
 # Additional ports to forward
@@ -20,8 +20,8 @@ networks:
 
 # Shared folders to configure
 folders:
-    - map: ~/code
-      to: /vagrant/code
+    - map: ../web/
+      to: /vagrant/web/
 
 # Web server to run
 webserver: nginx
@@ -41,9 +41,9 @@ mysql: "5.7"
 
 # Websites to create
 sites:
-    - url: site.test
-      root: /vagrant
-      php: 7.2
+    - url: cwtch.dev
+      root: /vagrant/web/
+      php: "7.2"
 #    - url: site70.test
 #      root: /vagrant
 #      php: "7.0"
@@ -55,10 +55,10 @@ sites:
 #      php: "5.6"
 
 # Databases to create
-#databases:
-#    - name: devbox
-#      user: devbox
-#      password: secret
+xdatabases:
+    - name: "cwtch"
+      user: "joel"
+      password: "secret"
 #    - name: devbox_testing
 #      user: tester
 #      password: secret
@@ -69,4 +69,10 @@ sites:
 
 
 # Directory containing scripts of additional software
-scripts_dir: "scripts"
+scripts_dir: "scripts/"
+
+apt-packages:
+  - php7.2-gd
+  - php7.2-mbstring
+  - php7.2-xml
+  - php7.2-intl

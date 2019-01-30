@@ -123,13 +123,21 @@ Vagrant.configure("2") do |config|
     if settings.has_key?("folders")
         settings["folders"].each do |folder|
             if folder["type"] == "nfs"
-                config.vm.synced_folder folder["map"], folder["to"], type: "nfs", mount_options: ['actimeo=1', 'nolock']
+                config.vm.synced_folder folder["map"], folder["to"], type: "nfs", mount_options: ['actimeo=1', 'nolock'], linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
             else
-                config.vm.synced_folder folder["map"], folder["to"]
+                config.vm.synced_folder folder["map"], folder["to"],
+                    id: "vagrant-root",
+                    owner: "vagrant",
+                    group: "www-data",
+                    mount_options: ["dmode=775,fmode=664"]
             end
         end
     else
-        config.vm.synced_folder ".", "/vagrant"
+        config.vm.synced_folder ".", "/vagrant",
+           id: "vagrant-root",
+           owner: "vagrant",
+           group: "www-data",
+           mount_options: ["dmode=775,fmode=664"]
     end
 
     # Install additional Ubuntu packages
